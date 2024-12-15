@@ -17,13 +17,34 @@ let BlogDetails = () => {
   let [loveneetData, setLoveneetData] = useState([]);
   let [recentBlogs, setRecentBlogs] = useState([]);
   let [searchQuery, setSearchQuery] = useState("");
+  let [storedNewsHeading, setStoredNewsHeading] = useState(null);
 
   useEffect(() => {
-    fetch(`https://brightlight-node.onrender.com/adding-blog/${id}`)
+    let blogHeading = localStorage.getItem("blog_heading");
+    setStoredNewsHeading(blogHeading);
+    fetch(`https://brightlight-node.onrender.com/new-added-blogs`)
       .then((res) => res.json())
       .then((data) => {
         if (data) {
-          setBlog(data);
+          if (blogHeading) {
+            let filteredData = data.filter((item) => {
+              return item.blog_heading == blogHeading;
+            });
+            setBlog(filteredData[0]);
+          } else {
+            let idValueArray = id.split("-").splice(0, 3).join(" ");
+            let filteredData = data.filter((item) => {
+              return item.blog_heading
+                .toLowerCase()
+                .includes(idValueArray.toLowerCase());
+            });
+            if(filteredData){
+              setBlog(filteredData[0]);
+            }
+            else{
+              setBlog(data[0]);
+            }
+          }
         }
       })
       .catch((error) => console.log(error));
@@ -37,10 +58,12 @@ let BlogDetails = () => {
       })
       .catch((error) => console.log(error));
 
-    fetch("https://brightlight-node.onrender.com/adding-blog/")
+    fetch("https://brightlight-node.onrender.com/new-added-blogs/")
       .then((res) => res.json())
       .then((data) => {
-        let recentBlogsFilteredData = data.filter((item) => item._id != id);
+        let recentBlogsFilteredData = data.filter(
+          (item) => item.blog_heading !== blogHeading
+        );
         if (recentBlogsFilteredData) {
           setRecentBlogs(recentBlogsFilteredData.slice(0, 3));
         }
@@ -108,14 +131,19 @@ let BlogDetails = () => {
               </div>
               <h4>{loveneetData.tagline}</h4>
               <div className={styles.loveneetLinks}>
-                <a className={styles.imageSection} href={loveneetData.linkedin}>
+                <a
+                  className={styles.imageSection}
+                  href={loveneetData.linkedin}
+                  target="_blank"
+                >
                   <img src={Linkedin} />
                 </a>
                 <div>
                   <p className={styles.haveAQuestion}>Have Questions?</p>
                   <a
                     className={styles.imageSection}
-                    href="https://api.leadconnectorhq.com/widget/booking/BVqmhNlxRMadz10ir6aM"
+                    href="/booking"
+                    target="_blank"
                   >
                     <img src={rcic} />
                   </a>
@@ -127,7 +155,7 @@ let BlogDetails = () => {
       </div>
       <div className={styles.blogsFlexSection}>
         <div className={styles.blogImgSection}>
-          <img src={blog.image} />
+          <img src={blog.image} alt={blog.alt_tag} title={blog.alt_tag} />
         </div>
         <div className={styles.blogSearchSection1}>
           <div className={styles.searchDiv}>
@@ -153,7 +181,18 @@ let BlogDetails = () => {
               <h4>Recent Blogs</h4>
               {recentBlogs?.map((item, index) => (
                 <a
-                  href={`/blogs/${item._id}`}
+                  onClick={() => {
+                    localStorage.setItem("blog_heading", item.blog_heading);
+                  }}
+                  href={
+                    !item.custom_url
+                      ? `/blogs/${item.blog_heading
+                          .trim()
+                          .toLowerCase()
+                          .replace(/[^\w\s]/g, "")
+                          .replace(/\s+/g, "-")}`
+                      : item.custom_url
+                  }
                   key={index}
                   className={styles.recentBlog}
                 >
@@ -165,7 +204,7 @@ let BlogDetails = () => {
           <div className={styles.freeAssesmentSection}>
             <h4>Start You Process Today With Us!</h4>
             <p>Book A Free Assement With Us Right Now.</p>
-            <a href="/booking">
+            <a href="/booking" target="_blank">
               Free Assesment
             </a>
           </div>
@@ -200,7 +239,18 @@ let BlogDetails = () => {
             <h4>Recent Blogs</h4>
             {recentBlogs?.map((item, index) => (
               <a
-                href={`/blogs/${item._id}`}
+                onClick={() => {
+                  localStorage.setItem("blog_heading", item.blog_heading);
+                }}
+                href={
+                  !item.custom_url
+                    ? `/blogs/${item.blog_heading
+                        .trim()
+                        .toLowerCase()
+                        .replace(/[^\w\s]/g, "")
+                        .replace(/\s+/g, "-")}`
+                    : item.custom_url
+                }
                 key={index}
                 className={styles.recentBlog}
               >
@@ -212,7 +262,7 @@ let BlogDetails = () => {
         <div className={styles.freeAssesmentSection}>
           <h4>Start You Process Today With Us!</h4>
           <p>Book A Free Assement With Us Right Now.</p>
-          <a href="/booking">
+          <a href="/booking" target="_blank">
             Free Assesment
           </a>
         </div>

@@ -13,13 +13,34 @@ let NewsDetails = () => {
   let [blog, setBlog] = useState({});
   let [recentBlogs, setRecentBlogs] = useState([]);
   let [searchQuery, setSearchQuery] = useState("");
+  let [storedNewsHeading, setStoredNewsHeading] = useState(null);
 
   useEffect(() => {
-    fetch(`https://brightlight-node.onrender.com/news/${id}`)
+    let newsHeading = localStorage.getItem("news_heading");
+    setStoredNewsHeading(newsHeading);
+    fetch(`https://brightlight-node.onrender.com/news`)
       .then((res) => res.json())
       .then((data) => {
         if (data) {
-          setBlog(data);
+          if (newsHeading) {
+            let filteredData = data.filter((item) => {
+              return item.news_heading == newsHeading;
+            });
+            setBlog(filteredData[0]);
+          } else {
+            let idValueArray = id.split("-").splice(0, 3).join(" ");
+            let filteredData = data.filter((item) => {
+              return item.news_heading
+                .toLowerCase()
+                .includes(idValueArray.toLowerCase());
+            });
+            if(filteredData){
+              setBlog(filteredData[0]);
+            }
+            else{
+              setBlog(data[0]);
+            }
+          }
         }
       })
       .catch((error) => console.log(error));
@@ -27,7 +48,9 @@ let NewsDetails = () => {
     fetch("https://brightlight-node.onrender.com/news/")
       .then((res) => res.json())
       .then((data) => {
-        let recentBlogsFilteredData = data.filter((item) => item._id !== id);
+        let recentBlogsFilteredData = data.filter(
+          (item) => item.news_heading !== newsHeading
+        );
         if (recentBlogsFilteredData) {
           setRecentBlogs(recentBlogsFilteredData.slice(0, 3));
         }
@@ -85,7 +108,11 @@ let NewsDetails = () => {
       </div>
       <div className={styles.blogsFlexSection}>
         <div className={styles.blogImgSection}>
-          <img src={blog.image} alt="News" />
+          <img
+            src={blog.image}
+            alt={blog.alt_tag_featured}
+            title={blog.alt_tag_featured}
+          />
         </div>
         <div className={styles.blogSearchSection1}>
           <div className={styles.searchDiv}>
@@ -111,7 +138,18 @@ let NewsDetails = () => {
               <h4>Recent News</h4>
               {recentBlogs.map((item) => (
                 <a
-                  href={`/news/${item._id}`}
+                  onClick={() => {
+                    localStorage.setItem("news_heading", item.news_heading);
+                  }}
+                  href={
+                    !item.custom_url
+                      ? `/news/${item.news_heading
+                          .trim()
+                          .toLowerCase()
+                          .replace(/[^\w\s]/g, "")
+                          .replace(/\s+/g, "-")}`
+                      : `/news${item.custom_url}`
+                  }
                   key={item._id}
                   className={styles.recentBlog}
                 >
@@ -123,7 +161,7 @@ let NewsDetails = () => {
           <div className={styles.freeAssesmentSection}>
             <h4>Start You Process Today With Us!</h4>
             <p>Book A Free Assement With Us Right Now.</p>
-            <a href="/booking">
+            <a href="/booking" target="_blank">
               Free Assesment
             </a>
           </div>
@@ -158,7 +196,18 @@ let NewsDetails = () => {
             <h4>Recent News</h4>
             {recentBlogs.map((item) => (
               <a
-                href={`/news/${item._id}`}
+                onClick={() => {
+                  localStorage.setItem("news_heading", item.news_heading);
+                }}
+                href={
+                  !item.custom_url
+                    ? `/news/${item.news_heading
+                        .trim()
+                        .toLowerCase()
+                        .replace(/[^\w\s]/g, "")
+                        .replace(/\s+/g, "-")}`
+                    : `/news${item.custom_url}`
+                }
                 key={item._id}
                 className={styles.recentBlog}
               >
@@ -170,7 +219,7 @@ let NewsDetails = () => {
         <div className={styles.freeAssesmentSection}>
           <h4>Start You Process Today With Us!</h4>
           <p>Book A Free Assement With Us Right Now.</p>
-          <a href="/booking">
+          <a href="/booking" target="_blank">
             Free Assesment
           </a>
         </div>

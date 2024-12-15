@@ -177,6 +177,10 @@ p {
   /* list-style-type: none; */
 }
 
+.BenifitList li{
+  margin-top: 8px;
+}
+
 .tefButton  {
   background-color: #00273f;
   color: #fff;
@@ -250,4 +254,7 @@ opacity: 0.9;
   .header h1 {
     font-size: 26px;
   }
+}
+.whychooseusLi li{
+  margin-top: 8px;
 }

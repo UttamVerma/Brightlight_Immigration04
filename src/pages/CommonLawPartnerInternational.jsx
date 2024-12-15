@@ -57,7 +57,7 @@ const CommonLawPartnerInternational = () => {
   }, []);
 
   useEffect(() => {
-    fetch("https://brightlight-node.onrender.com/changeCollegeProgram")
+    fetch("https://brightlight-node.onrender.com/comLawPartnerIntern")
       .then((res) => {
         return res.json();
       })
@@ -161,6 +161,7 @@ const CommonLawPartnerInternational = () => {
   return (
     <>
           <Helmet>
+          <link rel="canonical" href="https://brightlightimmigration.ca/common-law-partner-international" />
         <title>
           {metaData?.metaTitle
             ? metaData?.metaTitle
@@ -245,7 +246,7 @@ const CommonLawPartnerInternational = () => {
         </div>
       </div>
 
-      <div className={styles.container}>
+      <div className={styles.container} id="container">
         <header
           className={`${styles.header} ${styles.section}`}
           id="testing"
@@ -273,7 +274,7 @@ const CommonLawPartnerInternational = () => {
           className={`${styles.benefits} ${styles.section}`}
           id="testing"
           ref={(el) => (sectionsRef.current[2] = el)}
-        >
+         >
           <h2>
           {pData?.BenifitHeading}
           </h2>
@@ -570,7 +571,7 @@ const CommonLawPartnerInternational = () => {
           ref={(el) => (sectionsRef.current[90] = el)}
         >
         <h2>  {pData?.WhyChooseUsHeading01 }</h2>
-          <ul style={{marginLeft: "40px"}}>
+          <ul className={styles.whychooseusLi} style={{marginLeft: "40px"}}>
             <li>
               <strong>{strongText91}</strong>{" "} {remainingText91}
             </li>

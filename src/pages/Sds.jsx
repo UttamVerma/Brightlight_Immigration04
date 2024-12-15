@@ -141,6 +141,7 @@ const Sds = () => {
   return (
     <>
       <Helmet>
+      <link rel="canonical" href="https://brightlightimmigration.ca/sds" />
         <title>
           {metaData?.metaTitle
             ? metaData?.metaTitle
@@ -185,6 +186,7 @@ const Sds = () => {
       <Navbar1 />
       <div className={styles.bannerParent}>
         <div className={styles.banner}>
+        
           <div
             className={`${styles.bannerHeadingRotateParent} ${
               isDropdownOpen ? styles.active : ""
@@ -226,13 +228,25 @@ const Sds = () => {
         </div>
       </div>
 
-      <div className={styles.container}>
+      <div className={styles.container} id="container">
         <h1 className={styles.heading} id="about-program">
         {pData?.SdsHeading}
         </h1>
         <p style={{ textAlign: "center" }}>
         {pData?.SdsPara}
         </p>
+        <div className={styles.flashingNote}>
+            <h1 className={styles.heading}>{pData?.noteHeading}</h1>
+            <p>
+            {pData?.notContent}
+            </p>
+            {pData?.showNonSDSButton == "Y" ? <button
+              className={styles.button}
+              onClick={() => (window.location.href = "/non-sds")}
+            >
+              Non SDS
+            </button> : null}
+          </div>
 
         <section
           className={`${styles.intro} ${styles.section}`}
@@ -862,7 +876,7 @@ const Sds = () => {
           ref={(el) => (sectionsRef.current[9] = el)}
         >
          <h2>  {pData?.WhyChooseUsHeading01 }</h2>
-          <ul style={{marginLeft: "40px"}}>
+          <ul className={styles.whychooseusLi} style={{marginLeft: "40px"}}>
             <li>
               <strong>{strongText91}</strong>{" "} {remainingText91}
             </li>

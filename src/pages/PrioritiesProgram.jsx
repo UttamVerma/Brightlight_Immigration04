@@ -105,6 +105,7 @@ const PrioritiesProgram = () => {
   return (
     <>
       <Helmet>
+      <link rel="canonical" href="https://brightlightimmigration.ca/priorities-program" />
         <title>
           {metaData?.metaTitle
             ? metaData?.metaTitle
@@ -184,7 +185,7 @@ const PrioritiesProgram = () => {
         </div>
       </div>
 
-      <div className={styles.container}>
+      <div className={styles.container} id="container">
         <section
           className={`${styles.header} ${styles.section}`}
           id="benefits-2"

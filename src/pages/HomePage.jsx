@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState ,useMemo } from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import styles from "../styles/HomePage.module.css";
 import WhiteLogo from "../assets/bright-source.webp";
@@ -18,9 +18,9 @@ import Blogs from "../sections/Blogs";
 import ogImage from "../assets/ogImage.png";
 import { Helmet } from "react-helmet-async";
 import Odometer from "../components/Odometer";
+import { debounce } from "lodash";
 
 let HomePage = () => {
-  
   const swiperRef = useRef(null);
 
   let [newsSectionData, setNewsSectionData] = useState([]);
@@ -52,26 +52,45 @@ let HomePage = () => {
   const simplifyingRef = useRef(null); // Ref for the simplifying section
 
   let [metaData, setMetaData] = useState([]);
+  let [loveneetAlt, setLoveneetAlt] = useState([]);
+  let [memberOfAlt, setMemberOfAlt] = useState([]);
+  let [simplifyData, setSimplifyData] = useState([]);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        // Check if 80% of the section is visible
-        setIsVisible(entry.intersectionRatio >= 0.8);
-      },
-      {
-        threshold: 0.8,
-      }
-    );
+    const sections = [
+      { ref: sectionRef, callback: setIsVisible },
+      { ref: featuresSectionRef, callback: setIsFeaturesVisible },
+      { ref: testimonialsSectionRef, callback: setIsTestimonialsVisible },
+      // Add other sections here
+    ];
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
+    const observerOptions = { root: null, rootMargin: "0px", threshold: 0.1 };
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const target = entry.target;
+        const callback = sections.find(
+          (section) => section.ref.current === target
+        )?.callback;
+        if (entry.isIntersecting && callback) {
+          callback(true);
+        } else {
+          callback(false);
+        }
+      });
+    }, observerOptions);
+
+    sections.forEach(({ ref }) => {
+      if (ref.current) {
+        observer.observe(ref.current);
+      }
+    });
 
     return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
-      }
+      sections.forEach(({ ref }) => {
+        if (ref.current) {
+          observer.unobserve(ref.current);
+        }
+      });
     };
   }, []);
 
@@ -147,6 +166,45 @@ let HomePage = () => {
             console.log(error);
           });
 
+        fetch("https://brightlight-node.onrender.com/loveneetBgAlt")
+          .then((res) => {
+            return res.json();
+          })
+          .then((data) => {
+            if (data) {
+              setLoveneetAlt(data[0]);
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+
+        fetch("https://brightlight-node.onrender.com/featuresAlt")
+          .then((res) => {
+            return res.json();
+          })
+          .then((data) => {
+            if (data) {
+              setSimplifyData(data[0]);
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+
+        fetch("https://brightlight-node.onrender.com/memberOfAlt")
+          .then((res) => {
+            return res.json();
+          })
+          .then((data) => {
+            if (data) {
+              setMemberOfAlt(data[0]);
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+
         fetch("https://brightlight-node.onrender.com/news")
           .then((res) => {
             return res.json();
@@ -202,12 +260,14 @@ let HomePage = () => {
             let serviceSvg = data[0][`service${i}svg`];
             let serviceName = data[0][`service${i}name`];
             let serviceDesc = data[0][`service${i}desc`];
+            let serviceAlt = data[0][`service${i}alt`];
 
             if (serviceSvg && serviceName) {
               filteredArray.push({
                 title: serviceName,
                 img: serviceSvg,
                 desc: serviceDesc,
+                alt: serviceAlt,
               });
             }
           }
@@ -250,6 +310,11 @@ let HomePage = () => {
       }
     };
   }, []);
+  const debouncedSlideNext = debounce(() => {
+    if (swiperRef.current) {
+      swiperRef.current.slideNext();
+    }
+  }, 500);
 
   useEffect(() => {
     const observerOptions = {
@@ -370,35 +435,39 @@ let HomePage = () => {
       });
     };
   }, []);
-  useEffect(() => {
-    const scrollTwice = () => {
-      if (swiperRef.current) {
-        // Scroll to the next slide twice
-        swiperRef.current.slideNext();
-        setTimeout(() => {
-          swiperRef.current.slideNext();
-        }, 500); // Adjust timing if necessary
-      }
-    };
-
-    // Run the scroll function after page load (when the loader ends)
-    window.addEventListener("load", scrollTwice);
-
-    return () => {
-      window.removeEventListener("load", scrollTwice);
-    };
-  }, []);
 
   useEffect(() => {
     // Start the automatic slide after loading
-    autoSlideIntervalRef.current = setInterval(() => {
+    // autoSlideIntervalRef.current = setInterval(() => {
+    //   if (swiperRef.current) {
+    //     swiperRef.current.slideNext();
+    //   }
+    // }, 3000);
+
+    let handleClick = () => {
       if (swiperRef.current) {
-        swiperRef.current.slideNext();
+        setTimeout(() => {
+          swiperRef.current.slidePrev();
+        }, 500);
       }
-    }, 3000); // Change slide every 3 seconds
+
+      if (swiperRef.current) {
+        setTimeout(() => {
+          swiperRef.current.slidePrev();
+        }, 1000);
+      }
+
+      if (swiperRef.current) {
+        setTimeout(() => {
+          swiperRef.current.slideNext();
+        }, 1500);
+      }
+    };
+
+    handleClick();
 
     // Clear the interval on component unmount
-    return () => clearInterval(autoSlideIntervalRef.current);
+    // return () => clearInterval(autoSlideIntervalRef.current);
   }, []);
 
   const link = (title) => {
@@ -421,15 +490,18 @@ let HomePage = () => {
         return "#";
     }
   };
-  const linkLookup = useMemo(() => ({
-    "Permanent Residency": "/permanent-residency",
-    BCPNP: "/bc-pnp",
-    "Visitor Visa": "/visitor-visa",
-    "Study Visa": "/student-visa",
-    "Family Sponsorship": "/family-reunification-sponsorship",
-    "Work Permit": "/work-permit",
-    PFL: "/reply-to-pfl-page",
-  }), []);
+  const linkLookup = useMemo(
+    () => ({
+      "Permanent Residency": "/permanent-residency",
+      BCPNP: "/bc-pnp",
+      "Visitor Visa": "/visitor-visa",
+      "Study Visa": "/student-visa",
+      "Family Sponsorship": "/family-reunification-sponsorship",
+      "Work Permit": "/work-permit",
+      PFL: "/reply-to-pfl-page",
+    }),
+    []
+  );
 
   const handleCardClick = (title) => {
     const link = linkLookup[title]; // Lookup the link using the title
@@ -437,7 +509,7 @@ let HomePage = () => {
       window.location.href = link; // Navigate to the URL
     }
   };
-  const rcicAppointmentUrl = "https://api.leadconnectorhq.com/widget/booking/BVqmhNlxRMadz10ir6aM";
+  const rcicAppointmentUrl = "/booking";
 
   const memberInfo = [
     { heading: memberData?.heading1, img: memberData?.heading1Img },
@@ -452,19 +524,45 @@ let HomePage = () => {
     });
   };
 
+  // Modify the effect to preload only the visible images
   useEffect(() => {
-    // Preload service images
-    const serviceImages = services.map((service) => service.img);
+    // Preload service images that are visible (or a subset for initial load)
+    const serviceImages = services.slice(0, 3).map((service) => service.img); // Preload only the first few
     preloadImages(serviceImages);
 
     setLoaded(true); // Assuming data is fetched and set here
-  }, [services]); // Run when services data is available
+  }, [services]);
 
+  useEffect(() => {
+    if (!swiperRef.current) return;
 
+    autoSlideIntervalRef.current = setInterval(() => {
+      if (swiperRef.current && swiperRef.current.activeIndex < 2) {
+        swiperRef.current.slideNext();
+      } else {
+        clearInterval(autoSlideIntervalRef.current);
+      }
+    }, 3000);
+
+    return () => clearInterval(autoSlideIntervalRef.current);
+  }, []); // Remove `services` from the dependency list, unless absolutely needed
+
+  const handleNextSlide = () => {
+    if (swiperRef.current) {
+      swiperRef.current.slideNext();
+    }
+  };
+
+  const handlePreviousSlide = () => {
+    if (swiperRef.current) {
+      swiperRef.current.slidePrev();
+    }
+  };
 
   return (
     <>
       <Helmet>
+      <link rel="canonical" href="https://brightlightimmigration.ca/" />
         <title>
           {metaData?.metaTitle
             ? metaData?.metaTitle
@@ -508,153 +606,169 @@ let HomePage = () => {
       </Helmet>
 
       <Navbar1 showBlue={true} />
-      <div className={styles.bannerParent}>  
-      <div className={styles.bannerMain}> 
-      <TransitionGroup>
-        {loaded && (
-          <CSSTransition
-            classNames={{
-              enter: styles.fadeIn,
-              enterActive: styles.fadeInActive,
-              exit: styles.fadeOut,
-              exitActive: styles.fadeOutActive,
-            }}
-            timeout={1000}
-          >
-            <div className={styles.bannerHeading}>
-              <h1 className={`${styles.slideInFromLeft} ${styles.fadeIn}`}>
-                {headline1Rest}{" "}
-                <span className={styles.bannerBlueHeading}>
-                  {headline1Last}
-                </span>
-              </h1>
-              <h1 className={`${styles.slideInFromRight} ${styles.fadeIn}`}>
-                {headline2Rest}{" "}
-                <span className={styles.bannerBlueHeading}>
-                  {headline2Last}
-                </span>
-              </h1>
-              <h2 className={`${styles.slideInFromBottom} ${styles.fadeIn}`}>
-                {topSection?.SmallHeadline1}
-              </h2>
-            </div>
-          </CSSTransition>
-        )}
-      </TransitionGroup>
+      <div className={styles.bannerParent}>
+        <div className={styles.bannerMain}>
+          <TransitionGroup>
+            {loaded && (
+              <CSSTransition
+                classNames={{
+                  enter: styles.fadeIn,
+                  enterActive: styles.fadeInActive,
+                  exit: styles.fadeOut,
+                  exitActive: styles.fadeOutActive,
+                }}
+                timeout={0}
+              >
+                <div className={styles.bannerHeading}>
+                  <h1 className={`${styles.slideInFromLeft} ${styles.fadeIn}`}>
+                    {headline1Rest}{" "}
+                    <span className={styles.bannerBlueHeading}>
+                      {headline1Last}
+                    </span>
+                  </h1>
+                  <h1 className={`${styles.slideInFromRight} ${styles.fadeIn}`}>
+                    {headline2Rest}{" "}
+                    <span className={styles.bannerBlueHeading}>
+                      {headline2Last}
+                    </span>
+                  </h1>
+                  <h2
+                    className={`${styles.slideInFromBottom} ${styles.fadeIn}`}
+                  >
+                    {topSection?.SmallHeadline1}
+                  </h2>
+                </div>
+              </CSSTransition>
+            )}
+          </TransitionGroup>
 
-      <TransitionGroup>
-        {loaded && (
-          <CSSTransition
-            classNames={{
-              enter: styles.fadeIn,
-              enterActive: styles.fadeInActive,
-              exit: styles.fadeOut,
-              exitActive: styles.fadeOutActive,
-            }}
-            timeout={1000}
-          >
-            <div className={styles.cardContainer}>
-              {services.map((card, index) => (
+          <TransitionGroup>
+            {loaded && (
+              <CSSTransition
+                classNames={{
+                  enter: styles.fadeIn,
+                  enterActive: styles.fadeInActive,
+                  exit: styles.fadeOut,
+                  exitActive: styles.fadeOutActive,
+                }}
+                timeout={0}
+              >
+                <div className={styles.cardContainer}>
+                  {services.map((card, index) => (
+                    <div
+                      key={index}
+                      className={styles.card}
+                      onClick={() => handleCardClick(card.title)}
+                    >
+                      <CSSTransition
+                        classNames={{
+                          enter: styles.fadeIn,
+                          enterActive: styles.fadeInActive,
+                          exit: styles.fadeOut,
+                          exitActive: styles.fadeOutActive,
+                        }}
+                        timeout={0}
+                      >
+                        <img
+                          src={card.img}
+                          className={`${styles.icon} ${styles.fadeIn}`}
+                          loading="lazy"
+                          alt={card.alt}
+                          title={card.alt}
+                        />
+                      </CSSTransition>
+
+                      <div className={styles.title}>
+                        <h2>{card.title}</h2>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CSSTransition>
+            )}
+          </TransitionGroup>
+
+          <a href="/more-services">
+            <button className={styles.bookButton17} role="button">
+              More Services
+            </button>
+          </a>
+        </div>
+      </div>
+
+      <div className={styles.bannerParent2}>
+        {/* Check if loveneetBgImage exists before using it */}
+        {loveneetBgImage?.image && (
+          <img
+            src={loveneetBgImage.image}
+            alt={loveneetAlt.alt}
+            title={loveneetAlt.alt}
+            loading="lazy"
+            className={styles.backgroundImage}
+            width="100%" // Ensure the width stays 100% of the parent container
+            height="auto" // Maintain the aspect ratio
+          />
+        )}
+
+        <div className={styles.bannerParent2ButtonDiv}>
+          {/* LinkedIn button */}
+          {linkedinLink && (
+            <a href={linkedinLink} target="_blank" rel="noopener noreferrer">
+              <button className={styles.linkedInButton}>
+                <img src={LinkedinLogo} alt="LinkedIn" loading="lazy" />
+              </button>
+            </a>
+          )}
+
+          <div className={styles.bannerParent2HaveQuestions}>
+            <h5>Have Questions ?</h5>
+            <a
+              href={rcicAppointmentUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <button className={styles.rcicButton}>
+                <b>RCIC</b>
+                <p>APPOINTEMENT</p>
+              </button>
+            </a>
+          </div>
+        </div>
+
+        <div className={styles.bannerMain2}></div>
+      </div>
+
+      <div className={styles.memberParent} ref={sectionRef}>
+        <div className={styles.memberMain}>
+          <div className={styles.memberCardParent}>
+            {memberInfo.map((member, index) => {
+              let altData = [
+                memberOfAlt.alt1,
+                memberOfAlt.alt2,
+                memberOfAlt.alt3,
+              ];
+              return (
                 <div
                   key={index}
-                  className={styles.card}
-                  onClick={() => handleCardClick(card.title)}
+                  className={`${styles.memberCard} ${
+                    isVisible ? styles.showMemberCard : ""
+                  }`}
                 >
-                  <CSSTransition
-                    classNames={{
-                      enter: styles.fadeIn,
-                      enterActive: styles.fadeInActive,
-                      exit: styles.fadeOut,
-                      exitActive: styles.fadeOutActive,
-                    }}
-                    timeout={500}
-                  >
+                  <p>{member?.heading}</p>
+                  <div className={styles.memberCardImg}>
                     <img
-                      src={card.img}
-                      alt={card.title}
-                      className={`${styles.icon} ${styles.fadeIn}`}
+                      src={member?.img}
+                      alt={altData[index]}
+                      title={altData[index]}
                       loading="lazy"
                     />
-                  </CSSTransition>
-
-                  <div className={styles.title}>
-                    <h2>{card.title}</h2>
                   </div>
                 </div>
-              ))}
-            </div>
-          </CSSTransition>
-        )}
-      </TransitionGroup>
-
-        <a href="/more-services">
-          <button className={styles.bookButton17} role="button">
-            More Services
-          </button>
-        </a>
-      </div>
-    </div>
-
-    <div className={styles.bannerParent2}>
-      {/* Check if loveneetBgImage exists before using it */}
-      {loveneetBgImage?.image && (
-        <img 
-          src={loveneetBgImage.image} 
-          alt="Background Image" 
-          loading="lazy" 
-          className={styles.backgroundImage} 
-          width="100%"   // Ensure the width stays 100% of the parent container
-          height="auto"  // Maintain the aspect ratio
-        />
-      )}
-
-      <div className={styles.bannerParent2ButtonDiv}>
-        {/* LinkedIn button */}
-        {linkedinLink && (
-          <a href={linkedinLink} target="_blank" rel="noopener noreferrer">
-            <button className={styles.linkedInButton}>
-              <img src={LinkedinLogo} alt="LinkedIn" loading="lazy" />
-            </button>
-          </a>
-        )}
-
-        <div className={styles.bannerParent2HaveQuestions}>
-          <h5>Have Questions ?</h5>
-          <a href={rcicAppointmentUrl} target="_blank" rel="noopener noreferrer">
-            <button className={styles.rcicButton}>
-              <b>RCIC</b>
-              <p>APPOINTEMENT</p>
-            </button>
-          </a>
+              );
+            })}
+          </div>
         </div>
       </div>
-
-      <div className={styles.bannerMain2}></div>
-    </div>
-
-    <div className={styles.memberParent} ref={sectionRef}>
-      <div className={styles.memberMain}>
-        <div className={styles.memberCardParent}>
-          {memberInfo.map((member, index) => (
-            <div
-              key={index}
-              className={`${styles.memberCard} ${
-                isVisible ? styles.showMemberCard : ""
-              }`}
-            >
-              <p>{member?.heading}</p>
-              <div className={styles.memberCardImg}>
-                <img 
-                  src={member?.img} 
-                  alt={member?.heading || 'Member image'} // Accessibility improvement
-                  loading="lazy" 
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
 
       <div
         className={`${styles.simplifyingParent} ${
@@ -678,7 +792,8 @@ let HomePage = () => {
                     <div className={styles.simplifyingImg}>
                       <img
                         src={featuresData[`feature${num}SVG`]}
-                        alt={`Feature ${num} Image`}
+                        alt={simplifyData[`alt${num}`]}
+                        title={simplifyData[`alt${num}`]}
                         loading="lazy"
                       />
                     </div>
@@ -707,13 +822,14 @@ let HomePage = () => {
               <a href="/more-services">Know More</a>
             </button>
           </div>
-
-          <div className={styles.testimonialsVideoSection}>
+          <div
+            className={`${styles.testimonialsVideoSection} ${styles.servicesCardSwiper}`}
+          >
             <Swiper
               effect={"coverflow"}
               grabCursor={true}
               centeredSlides={true}
-              loop={true}
+              loop={true} // Set loop to true for infinite scrolling
               slidesPerView={"auto"}
               coverflowEffect={{
                 rotate: 0,
@@ -728,15 +844,15 @@ let HomePage = () => {
               }}
               modules={[EffectCoverflow, Pagination, Navigation]}
               className={styles.swiper_container}
-              onSwiper={(swiper) => (swiperRef.current = swiper)} // Store swiper instance
+              onSwiper={(swiper) => (swiperRef.current = swiper)}
             >
               {services?.map((item, index) => (
-                <SwiperSlide key={index}>
+                <SwiperSlide key={index} className={styles.whiteBlockCard}>
                   <div className={styles.expertiseDiv}>
                     <h4>{item.title}</h4>
                     <p>{item.desc}</p>
                     <a
-                      className={styles.expertiseKmowMore}
+                      className={styles.expertiseKnowMore}
                       href={link(item.title)}
                     >
                       Know More
@@ -744,12 +860,16 @@ let HomePage = () => {
                   </div>
                 </SwiperSlide>
               ))}
-
-              <div className={styles.slider_controler}>
-                <div className={styles.swiper_pagination}></div>
-              </div>
             </Swiper>
+
+            {/* Navigation Buttons */}
+
+            {/* Pagination Controller */}
+            <div className={styles.slider_controler}>
+              <div className="swiper_pagination"></div>
+            </div>
           </div>
+
           <div
             className={styles.navigationButtons}
             class="navigation_button_02"
@@ -772,7 +892,12 @@ let HomePage = () => {
               className={`${styles.aspectsCard} ${styles.fadeFromLeft}`}
               ref={(el) => (aspectsCardRefs.current[0] = el)}
             >
-              <img src={achiementsData?.achievement1SVG} loading="lazy"/>
+              <img
+                src={achiementsData?.achievement1SVG}
+                loading="lazy"
+                alt={achiementsData?.achievement1Alt}
+                title={achiementsData?.achievement1Alt}
+              />
               <h1>
                 <Odometer value={achiementsData?.achievement1Numbers} />+
               </h1>
@@ -782,7 +907,12 @@ let HomePage = () => {
               className={`${styles.aspectsCard} ${styles.fadeFromBottom}`}
               ref={(el) => (aspectsCardRefs.current[1] = el)}
             >
-              <img src={achiementsData?.achievement2SVG} loading="lazy"/>
+              <img
+                src={achiementsData?.achievement2SVG}
+                loading="lazy"
+                alt={achiementsData?.achievement2Alt}
+                title={achiementsData?.achievement2Alt}
+              />
               <h1>
                 <Odometer value={achiementsData?.achievement2Numbers} />+
               </h1>
@@ -792,7 +922,12 @@ let HomePage = () => {
               className={`${styles.aspectsCard} ${styles.fadeFromRight}`}
               ref={(el) => (aspectsCardRefs.current[2] = el)}
             >
-              <img src={achiementsData?.achievement3SVG} loading="lazy"/>
+              <img
+                src={achiementsData?.achievement3SVG}
+                loading="lazy"
+                alt={achiementsData?.achievement3Alt}
+                title={achiementsData?.achievement3Alt}
+              />
               <h1>
                 <Odometer value={achiementsData?.achievement3Numbers} />+
               </h1>
@@ -807,7 +942,7 @@ let HomePage = () => {
         <div className={styles.sourceMain}>
           <div className={styles.sourceHeadingParent}>
             <div className={styles.sourceHeadingParentFirstDiv}>
-              <img src={WhiteLogo} loading="lazy"/>
+              <img src={WhiteLogo} loading="lazy" alt="" />
             </div>
             <div>
               {newsSectionData && <h1>{newsSectionData.heading}</h1>}
@@ -871,7 +1006,25 @@ let HomePage = () => {
                     <div className={styles.sourceContentData}>
                       <h3>{item.news_heading}</h3>
                       <p>{truncateText(item.news_content, 150)}</p>
-                      <a href={`/news/${item._id}`}>Read more</a>
+                      <a
+                        onClick={() => {
+                          localStorage.setItem(
+                            "news_heading",
+                            item.news_heading
+                          );
+                        }}
+                        href={
+                          !item.custom_url
+                            ? `/news/${item.news_heading
+                                .trim()
+                                .toLowerCase()
+                                .replace(/[^\w\s]/g, "")
+                                .replace(/\s+/g, "-")}`
+                            : `/news${item.custom_url}`
+                        }
+                      >
+                        Read more
+                      </a>
                     </div>
                   </div>
                 </>

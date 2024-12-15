@@ -105,6 +105,7 @@ const PilotPrograms = () => {
   return (
     <>
       <Helmet>
+      <link rel="canonical" href="https://brightlightimmigration.ca/pilot-programs" />
         <title>
           {metaData?.metaTitle
             ? metaData?.metaTitle
@@ -180,7 +181,7 @@ const PilotPrograms = () => {
         </div>
       </div>
 
-      <div className={styles.container}>
+      <div className={styles.container} id="container">
         <h1
           className={`${styles.heading} ${styles.section}`}
           id="about-program"

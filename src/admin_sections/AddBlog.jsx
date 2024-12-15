@@ -6,11 +6,15 @@ import update from "../assets/update.png";
 import { ToastContainer, toast, Bounce } from "react-toastify";
 
 let AddBlog = () => {
-  const [textareaValue, setTextareaValue] = useState("Bigger Heading");
+  const [textareaValue, setTextareaValue] = useState(
+    "Your Selection Code Here"
+  );
   const [ytIframe, setYtIframe] = useState(null);
   const [ytLink, setYtLink] = useState("");
   const [ytShortcode, setYtShortcode] = useState("");
   const [imageBase64, setImageBase64] = useState("");
+
+  let [blogTag, setBlogTag] = useState("");
 
   const handleTagClick = (tag) => {
     let tagValue = "";
@@ -20,7 +24,7 @@ let AddBlog = () => {
         tagValue = "<h2>Your bigger heading goes here</h2>";
         break;
       case "Sub Heading":
-        tagValue = "<h3>Your bigger heading goes here</h3>";
+        tagValue = "<h3>Your sub heading goes here</h3>";
         break;
       case "Bold":
         tagValue = "<strong>Your bold text goes here</strong>";
@@ -89,6 +93,31 @@ let AddBlog = () => {
     const match = link.match(regExp);
     return match ? match[1] : null;
   };
+
+  useEffect(() => {
+    if (blogTag) {
+      // Copy the blogTag to clipboard
+      navigator.clipboard
+        .writeText(blogTag)
+        .then(() => {
+          // Show success toast
+          toast.success(`${blogTag} copied to clipboard`, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Bounce,
+          });
+        })
+        .catch((err) => {
+          console.error("Failed to copy text to clipboard", err);
+        });
+    }
+  }, [blogTag]);
 
   // Function to handle copy button click for YouTube video shortcode
   const handleCopyClickYT = () => {
@@ -243,6 +272,8 @@ let AddBlog = () => {
     tag_1: "",
     tag_2: "",
     tag_3: "",
+    custom_url: "",
+    alt_tag: "",
     blog_content: "",
     metaTitle: "",
     metaDescription: "",
@@ -283,7 +314,7 @@ let AddBlog = () => {
       formData.append(key, sectionDataSingle[key]);
     });
 
-    fetch("https://brightlight-node.onrender.com/adding-blog", {
+    fetch("https://brightlight-node.onrender.com/new-added-blogs", {
       method: "POST",
       body: formData,
     })
@@ -306,6 +337,8 @@ let AddBlog = () => {
           tag_1: "",
           tag_2: "",
           tag_3: "",
+          custom_url: "",
+          alt_tag: "",
           blog_content: "",
           metaTitle: "",
           metaDescription: "",
@@ -320,12 +353,624 @@ let AddBlog = () => {
     <div className={styles.singleSectionData}>
       <ToastContainer />
       <input
+        placeholder="Meta Title"
+        name="metaTitle"
+        value={sectionDataSingle.metaTitle || ""}
+        onChange={handleInputChange}
+        disabled={!editMode}
+      />
+      <input
+        placeholder="Meta Description"
+        name="metaDescription"
+        value={sectionDataSingle.metaDescription || ""}
+        onChange={handleInputChange}
+        disabled={!editMode}
+      />
+      <input
+        type="file"
+        name="image"
+        onChange={handleInputChange}
+        disabled={!editMode}
+      />
+      <input
         placeholder="Blog Heading"
         name="blog_heading"
         value={sectionDataSingle.blog_heading || ""}
         onChange={handleInputChange}
         disabled={!editMode}
       />
+      <input
+        placeholder="Alt Tag"
+        name="alt_tag"
+        value={sectionDataSingle.alt_tag || ""}
+        onChange={handleInputChange}
+      />
+      <div className={styles.blogContentTageSelectionArea}>
+        <div className={styles.tagsArea}>
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Express Entry")}
+          >
+            <p>Express Entry</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Permanent Residency")}
+          >
+            <p>Permanent Residency</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Category Based")}
+          >
+            <p>Category Based</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("CLB ILETS Calculator")}
+          >
+            <p>CLB ILETS Calculator</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Previous Draw History")}
+          >
+            <p>Previous Draw History</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Private Route")}
+          >
+            <p>Private Route</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("More Services")}
+          >
+            <p>More Services</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Privacy Policy")}
+          >
+            <p>Privacy Policy</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Terms & Conditions")}
+          >
+            <p>Terms & Conditions</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Not Found Page")}
+          >
+            <p>Not Found Page</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Skilled Worker Stream")}
+          >
+            <p>Skilled Worker Stream</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Priorities Program")}
+          >
+            <p>Priorities Program</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("International Post Graduate Program")}
+          >
+            <p>International Post Graduate Program</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("International Graduate Program")}
+          >
+            <p>International Graduate Program</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Health Authority Stream")}
+          >
+            <p>Health Authority Stream</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Healthcare Targeted Draw")}
+          >
+            <p>Healthcare Targeted Draw</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Entry Level Semi Skilled")}
+          >
+            <p>Entry Level Semi Skilled</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("BC PNP")}
+          >
+            <p>BC PNP</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("PNP")}
+          >
+            <p>PNP</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("RNIP")}
+          >
+            <p>RNIP</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Agri Food Pilot Program")}
+          >
+            <p>Agri Food Pilot Program</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Pilot Programs")}
+          >
+            <p>Pilot Programs</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Transport Occupation Targeted Draw")}
+          >
+            <p>Transport Occupation Targeted Draw</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Trade Occupation Targeted Draw")}
+          >
+            <p>Trade Occupation Targeted Draw</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("STEM Targeted Draw")}
+          >
+            <p>STEM Targeted Draw</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("French Targeted Draw")}
+          >
+            <p>French Targeted Draw</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Federal Skilled Worker Program")}
+          >
+            <p>Federal Skilled Worker Program</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Federal Skilled Trades Program")}
+          >
+            <p>Federal Skilled Trades Program</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Canadian Experience Class")}
+          >
+            <p>Canadian Experience Class</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Dual Intent Visa")}
+          >
+            <p>Dual Intent Visa</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Business Visitor Visa")}
+          >
+            <p>Business Visitor Visa</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Visitor Visa")}
+          >
+            <p>Visitor Visa</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Temporary Resident")}
+          >
+            <p>Temporary Resident</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Temporary Resident Permit Draft")}
+          >
+            <p>Temporary Resident Permit Draft</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Super Visa")}
+          >
+            <p>Super Visa</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Common Law Partner Temporary")}
+          >
+            <p>Common Law Partner Temporary</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Common Law Partner Permanent")}
+          >
+            <p>Common Law Partner Permanent</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Common Law Partner International")}
+          >
+            <p>Common Law Partner International</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Spouse Common Law Sponsorship")}
+          >
+            <p>Spouse Common Law Sponsorship</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Restoration Status Draft")}
+          >
+            <p>Restoration Status Draft</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Spousal Open Work Permit")}
+          >
+            <p>Spousal Open Work Permit</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Open Work Permit for Spouse Inland")}
+          >
+            <p>Open Work Permit for Spouse Inland</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Flagpoling")}
+          >
+            <p>Flagpoling</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Extensions Draft")}
+          >
+            <p>Extensions Draft</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Study Permit Minors")}
+          >
+            <p>Study Permit Minors</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("SDS")}
+          >
+            <p>SDS</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Non SDS")}
+          >
+            <p>Non SDS</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Outside Canada")}
+          >
+            <p>Outside Canada</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Visitor to Student")}
+          >
+            <p>Visitor to Student</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Change College Program")}
+          >
+            <p>Change College Program</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Inside Canada")}
+          >
+            <p>Inside Canada</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Student Visa")}
+          >
+            <p>Student Visa</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Parents Grandparents")}
+          >
+            <p>Parents Grandparents</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Orphan")}
+          >
+            <p>Orphan</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Lonely Canadian")}
+          >
+            <p>Lonely Canadian</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Humanitarian Compassionate")}
+          >
+            <p>Humanitarian Compassionate</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Dependent Children")}
+          >
+            <p>Dependent Children</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Adoption")}
+          >
+            <p>Adoption</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Family Reunification Sponsorship")}
+          >
+            <p>Family Reunification Sponsorship</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("PGWP")}
+          >
+            <p>PGWP</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Open Work Dependent Children")}
+          >
+            <p>Open Work Dependent Children</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Open Work Vulnerable LP")}
+          >
+            <p>Open Work Vulnerable LP</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Francophone Mobility Program")}
+          >
+            <p>Francophone Mobility Program</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Bridging Open Work Permit LP")}
+          >
+            <p>Bridging Open Work Permit LP</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Low Wage LMIA")}
+          >
+            <p>Low Wage LMIA</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Global Stream LMIA")}
+          >
+            <p>Global Stream LMIA</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Agriculture Stream LMIA")}
+          >
+            <p>Agriculture Stream LMIA</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Open Work Permit")}
+          >
+            <p>Open Work Permit</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("LMIA Reviewed")}
+          >
+            <p>LMIA Reviewed</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Reply to PFL Page")}
+          >
+            <p>Reply to PFL Page</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Additional Document")}
+          >
+            <p>Additional Document</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Reconsideration")}
+          >
+            <p>Reconsideration</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Citizenship")}
+          >
+            <p>Citizenship</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("PR Renewal")}
+          >
+            <p>PR Renewal</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Work Permit")}
+          >
+            <p>Work Permit</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Category Based Express")}
+          >
+            <p>Category Based Express</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Agriculture Agri Food Occupation")}
+          >
+            <p>Agriculture Agri Food Occupation</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("In Home Caregiver Program LP")}
+          >
+            <p>In Home Caregiver Program LP</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Pathways for Caregiver")}
+          >
+            <p>Pathways for Caregiver</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() =>
+              setBlogTag("Permanent Residence Pathways Caregivers LP")
+            }
+          >
+            <p>Permanent Residence Pathways Caregivers LP</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Spouse Inland")}
+          >
+            <p>Spouse Inland</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Spouse Outland")}
+          >
+            <p>Spouse Outland</p>
+          </div>
+
+          <div
+            className={`${styles.tag} ${!editMode ? styles.disabled : ""}`}
+            onClick={() => setBlogTag("Same Sex")}
+          >
+            <p>Same Sex</p>
+          </div>
+        </div>
+      </div>
       <input
         placeholder="Tag 1"
         name="tag_1"
@@ -347,6 +992,21 @@ let AddBlog = () => {
         onChange={handleInputChange}
         disabled={!editMode}
       />
+      <p className={styles.precautionLine}>
+        To Add a "custom url" to your blog, if the input below left empty, the blog title will be converted into the link/url of the blog. Use this following way to add custom url to the blog without qoutes and in small case only:- "/your-custom-url".
+      </p>
+      <input
+        placeholder="Custom URL"
+        name="custom_url"
+        value={sectionDataSingle.custom_url || ""}
+        onChange={handleInputChange}
+        disabled={!editMode}
+      />
+      <p className={styles.precautionLine}>
+        Select the option below for your required content type, get the basic
+        text, change the text placed inside the "{"<> </>"}" with your required
+        text, copy the entire text including {"<> </>"} , paste it below.
+      </p>
       <div className={styles.blogContentTageSelectionArea}>
         <div className={styles.tagsArea}>
           <div
@@ -397,6 +1057,7 @@ let AddBlog = () => {
           value={textareaValue}
           onChange={(e) => setTextareaValue(e.target.value)}
           disabled={!editMode}
+          style={{ height: "150px" }}
         />
       </div>
       <textarea
@@ -405,27 +1066,9 @@ let AddBlog = () => {
         value={sectionDataSingle.blog_content || ""}
         onChange={handleInputChange}
         disabled={!editMode}
+        style={{ height: "500px" }}
       />
-      <input
-        placeholder="Meta Title"
-        name="metaTitle"
-        value={sectionDataSingle.metaTitle || ""}
-        onChange={handleInputChange}
-        disabled={!editMode}
-      />
-      <input
-        placeholder="Meta Description"
-        name="metaDescription"
-        value={sectionDataSingle.metaDescription || ""}
-        onChange={handleInputChange}
-        disabled={!editMode}
-      />
-      <input
-        type="file"
-        name="image"
-        onChange={handleInputChange}
-        disabled={!editMode}
-      />
+
       {sectionDataSingle.image && (
         <img
           className={styles.existingImageSmall}

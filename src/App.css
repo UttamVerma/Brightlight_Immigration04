@@ -1,5 +1,4 @@
-
-                                                               /* //CreativeMonk 2024// */
+/* //CreativeMonk 2024// */
 
 .App * {
   margin: 0;
@@ -87,6 +86,27 @@ thead {
 }
 
 ul li:empty {
+  display: none;
+}
+
+ol li:empty {
+  display: none;
+}
+
+#container p:empty,
+#container h1:empty,
+#container h2:empty,
+#container h3:empty,
+#container h4:empty,
+#container h5:empty,
+#container h6:empty,
+#container span:empty,
+#container table:empty,
+#container thead:empty,
+#container tbody:empty,
+#container tr:empty,
+#container td:empty,
+#container strong:empty {
   display: none;
 }
 
@@ -281,10 +301,4 @@ ol{
   }
 }
 
-.container *:empty {
-  display: none;
-}
-
-
-
-                                                               /* //CreativeMonk 2024// */
+                                                    /* //CreativeMonk 2024// */

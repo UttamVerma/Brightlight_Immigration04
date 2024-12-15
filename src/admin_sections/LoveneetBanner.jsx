@@ -115,6 +115,7 @@ let LoveneetBanner = () => {
   }, []);
 
   return (
+    <>
     <div className={styles.singleSectionData}>
       <ToastContainer/>
       <img className={styles.existingImage} src={sectionDataSingle.image} />
@@ -141,6 +142,7 @@ let LoveneetBanner = () => {
         </div>
       )}
     </div>
+    </>
   );
 };
 

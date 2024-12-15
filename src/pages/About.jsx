@@ -22,6 +22,7 @@ import ogImage from "../assets/ogImage.png";
 import { Helmet } from "react-helmet-async";
 import Odometer from "../components/Odometer";
 
+
 let About = () => {
   let [topSectionData, setTopSectionData] = useState([]);
 
@@ -300,6 +301,7 @@ let About = () => {
   return (
     <>
       <Helmet>
+      <link rel="canonical" href="https://brightlightimmigration.ca/about-us" />
         <title>
           {metaData.metaTitle
             ? metaData?.metaTitle

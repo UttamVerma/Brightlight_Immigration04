@@ -121,6 +121,7 @@ let CategoryBased = () => {
   return (
     <>
       <Helmet>
+      <link rel="canonical" href="https://brightlightimmigration.ca/category-based" />
         <title>
           {metaData?.metaTitle
             ? metaData?.metaTitle

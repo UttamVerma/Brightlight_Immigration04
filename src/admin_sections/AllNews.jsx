@@ -3,10 +3,12 @@ import { useState, useEffect } from "react";
 import editIcon from "../assets/edit.png";
 import deleteIcon from "../assets/delete.png";
 import update from "../assets/update.png";
-
 import { ToastContainer, toast, Bounce } from "react-toastify";
 
 const AllNews = () => {
+  let [confirmDelete, setConfirmDelete] = useState(null);
+  let [showDeletePopup, setShowDeletePopup] = useState(false);
+  let [clickedOnYes, setClickedOnYes] = useState(false);
   let notifySuccess = () => {
     toast.success("Success", {
       position: "top-center",
@@ -70,6 +72,8 @@ const AllNews = () => {
     tag_1: "",
     tag_2: "",
     tag_3: "",
+    custom_url: "",
+    alt_tag_featured: "",
     news_content: "",
     metaTitle: "",
     metaDescription: "",
@@ -80,7 +84,7 @@ const AllNews = () => {
     fetch("https://brightlight-node.onrender.com/news")
       .then((res) => res.json())
       .then((data) => {
-        setBlogs(data);
+        setBlogs(data.reverse());
       })
       .catch((error) => {
         console.log("Error fetching data:", error);
@@ -150,6 +154,8 @@ const AllNews = () => {
           tag_1: "",
           tag_2: "",
           tag_3: "",
+          custom_url: "",
+          alt_tag_featured: "",
           news_content: "",
           metaTitle: "",
           metaDescription: "",
@@ -167,134 +173,206 @@ const AllNews = () => {
   };
 
   // Handle delete click
-  const handleDeleteClick = (blogId) => {
-    fetch(`https://brightlight-node.onrender.com/news/${blogId}`, {
-      method: "DELETE",
-    })
-      .then(() => {
-        notifyDelete();
-        fetch("https://brightlight-node.onrender.com/news")
-          .then((res) => res.json())
-          .then((data) => {
-            setBlogs(data);
-          })
-          .catch((error) => {
-            console.log("Error fetching data:", error);
-          });
-      })
-      .catch((error) => {
-        notifyError();
-      });
-  };
+  // const handleDeleteClick = (blogId) => {
+  //   fetch(`https://brightlight-node.onrender.com/news/${blogId}`, {
+  //     method: "DELETE",
+  //   })
+  //     .then(() => {
+  //       notifyDelete();
+  //       fetch("https://brightlight-node.onrender.com/news")
+  //         .then((res) => res.json())
+  //         .then((data) => {
+  //           setBlogs(data);
+  //         })
+  //         .catch((error) => {
+  //           console.log("Error fetching data:", error);
+  //         });
+  //     })
+  //     .catch((error) => {
+  //       notifyError();
+  //     });
+  // };
+
+  useEffect(() => {
+    if (confirmDelete && clickedOnYes) {
+      fetch(
+        `https://brightlight-node.onrender.com/news/${confirmDelete}`,
+        {
+          method: "DELETE",
+        }
+      )
+        .then(() => {
+          notifyDelete();
+          setShowDeletePopup(false);
+          fetch("https://brightlight-node.onrender.com/news")
+            .then((res) => res.json())
+            .then((data) => {
+              setBlogs(data);
+            })
+            .catch((error) => {
+              console.log("Error fetching data:", error);
+            });
+          setConfirmDelete(null);
+          setClickedOnYes(false);
+        })
+        .catch((error) => {
+          notifyError();
+        });
+    }
+  }, [confirmDelete, showDeletePopup, clickedOnYes]);
 
   return (
-    <div className={styles.blogList}>
-      <ToastContainer />
-      {blogs.length === 0 ? (
-        <p className={styles.noBlogsPara}>Loading News</p>
-      ) : (
-        blogs.map((blog) => (
-          <div key={blog._id} className={styles.blogItem}>
-            <div className={styles.blogContent}>
-              <h4>{blog.news_heading}</h4>
-              <img src={blog.image} alt="Blog" className={styles.blogImage} />
-              <div className={styles.editIcons}>
-                {editBlogId === blog._id ? (
-                  <>
-                    <img
-                      src={update}
-                      className={styles.updateIcon}
-                      onClick={handleUpdateClick}
-                      alt="Update"
-                    />
-                    <img
-                      src={editIcon}
-                      className={styles.editIcon}
-                      onClick={() => setEditBlogId(null)}
-                      alt="Cancel Edit"
-                    />
-                  </>
-                ) : (
-                  <>
-                    <img
-                      src={editIcon}
-                      className={styles.editIcon}
-                      onClick={() => handleEditClick(blog)}
-                      alt="Edit"
-                    />
-                    <img
-                      src={deleteIcon}
-                      className={styles.deleteIcon}
-                      onClick={() => handleDeleteClick(blog._id)}
-                      alt="Dlt"
-                    />
-                  </>
-                )}
+    <>
+      <div className={styles.blogList}>
+        <ToastContainer />
+        {blogs.length === 0 ? (
+          <p className={styles.noBlogsPara}>Loading News</p>
+        ) : (
+          blogs.map((blog) => (
+            <div key={blog._id} className={styles.blogItem}>
+              <div className={styles.blogContent}>
+                <h4>{blog.news_heading}</h4>
+                <img src={blog.image} alt="Blog" className={styles.blogImage} />
+                <div className={styles.singleBlogOptions}>
+                  {editBlogId === blog._id ? (
+                    <>
+                      <img
+                        src={update}
+                        className={styles.updateIcon}
+                        onClick={handleUpdateClick}
+                        alt="Update"
+                      />
+                      <img
+                        src={editIcon}
+                        className={styles.editIcon}
+                        onClick={() => setEditBlogId(null)}
+                        alt="Cancel Edit"
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <img
+                        src={editIcon}
+                        className={styles.editIcon}
+                        onClick={() => handleEditClick(blog)}
+                        alt="Edit"
+                      />
+                      <img
+                        src={deleteIcon}
+                        className={styles.deleteIcon}
+                        onClick={() => {
+                          setShowDeletePopup(true);
+                          setConfirmDelete(blog._id);
+                          // handleDeleteClick(blog._id)
+                        }}
+                        alt="Dlt"
+                      />
+                    </>
+                  )}
+                </div>
               </div>
-            </div>
-            {editBlogId === blog._id && (
-              <div className={styles.editForm}>
-                <input
-                  placeholder="News Heading"
-                  name="news_heading"
-                  value={newBlogData.news_heading}
-                  onChange={handleInputChange}
-                />
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleInputChange}
-                  name="image"
-                />
-                {newBlogData.image && (
-                  <img
-                    src={newBlogData.image}
-                    alt="New Blog"
-                    className={styles.blogImage}
+              {editBlogId === blog._id && (
+                <div className={styles.editForm}>
+                  <input
+                    placeholder="News Heading"
+                    name="news_heading"
+                    value={newBlogData.news_heading}
+                    onChange={handleInputChange}
                   />
-                )}
-                <input
-                  placeholder="Tag 1"
-                  name="tag_1"
-                  value={newBlogData.tag_1}
-                  onChange={handleInputChange}
-                />
-                <input
-                  placeholder="Tag 2"
-                  name="tag_2"
-                  value={newBlogData.tag_2}
-                  onChange={handleInputChange}
-                />
-                <input
-                  placeholder="Tag 3"
-                  name="tag_3"
-                  value={newBlogData.tag_3}
-                  onChange={handleInputChange}
-                />
-                <textarea
-                  placeholder="News Content"
-                  name="news_content"
-                  value={newBlogData.news_content}
-                  onChange={handleInputChange}
-                />
-                <input
-                  placeholder="Meta Title"
-                  name="metaTitle"
-                  value={newBlogData.metaTitle}
-                  onChange={handleInputChange}
-                />
-                <input
-                  placeholder="Meta Description"
-                  name="metaDescription"
-                  value={newBlogData.metaDescription}
-                  onChange={handleInputChange}
-                />
-              </div>
-            )}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleInputChange}
+                    name="image"
+                  />
+                  {newBlogData.image && (
+                    <img
+                      src={newBlogData.image}
+                      alt="New Blog"
+                      className={styles.blogImage}
+                    />
+                  )}
+                  <input
+                    placeholder="Tag 1"
+                    name="tag_1"
+                    value={newBlogData.tag_1}
+                    onChange={handleInputChange}
+                  />
+                  <input
+                    placeholder="Tag 2"
+                    name="tag_2"
+                    value={newBlogData.tag_2}
+                    onChange={handleInputChange}
+                  />
+                  <input
+                    placeholder="Tag 3"
+                    name="tag_3"
+                    value={newBlogData.tag_3}
+                    onChange={handleInputChange}
+                  />
+                  <input
+                    placeholder="Custom URL"
+                    name="custom_url"
+                    value={newBlogData.custom_url}
+                    onChange={handleInputChange}
+                  />
+                  <textarea
+                    placeholder="News Content"
+                    name="news_content"
+                    value={newBlogData.news_content}
+                    onChange={handleInputChange}
+                  />
+                  <input
+                    placeholder="Alt Tag"
+                    name="alt_tag_featured"
+                    value={newBlogData.alt_tag_featured}
+                    onChange={handleInputChange}
+                  />
+                  <input
+                    placeholder="Meta Title"
+                    name="metaTitle"
+                    value={newBlogData.metaTitle}
+                    onChange={handleInputChange}
+                  />
+                  <input
+                    placeholder="Meta Description"
+                    name="metaDescription"
+                    value={newBlogData.metaDescription}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              )}
+            </div>
+          ))
+        )}
+      </div>
+      <div
+        className={`${styles.deletePopupParent} ${
+          showDeletePopup ? styles.showDeletePopup : ""
+        }`}
+      >
+        <div className={styles.deletePopup}>
+          <h3>Are You Sure You Want To Delete This Item ?</h3>
+          <div>
+            <button
+              className={styles.yesBtn}
+              onClick={() => setClickedOnYes(true)}
+            >
+              Yes
+            </button>
+            <button
+              className={styles.noBtn}
+              onClick={() => {
+                setConfirmDelete(null);
+                setShowDeletePopup(false);
+              }}
+            >
+              No
+            </button>
           </div>
-        ))
-      )}
-    </div>
+        </div>
+      </div>
+    </>
   );
 };
 

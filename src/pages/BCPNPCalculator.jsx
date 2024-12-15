@@ -445,6 +445,7 @@ const BCPNPCalculator = () => {
   return (
     <>
       <Helmet>
+      <link rel="canonical" href="https://brightlightimmigration.ca/bcpnp-calculator" />
         <title>
           {metaData.metaTitle ? metaData?.metaTitle : "Brightlight Immigration"}
         </title>
@@ -1379,10 +1380,8 @@ const BCPNPCalculator = () => {
                       </div>
 
                       <div
-                        onClick={() =>
-                          (window.location.href =
-                            "https://api.leadconnectorhq.com/widget/booking/BVqmhNlxRMadz10ir6aM")
-                        }
+                       onClick={() => window.open("/booking", "_blank")}
+
                         className={styles.actionButton}
                       >
                         <h2>RCIC Appointment</h2>
@@ -1432,10 +1431,7 @@ const BCPNPCalculator = () => {
                   </div>
 
                   <div
-                    onClick={() =>
-                      (window.location.href =
-                        "https://api.leadconnectorhq.com/widget/booking/BVqmhNlxRMadz10ir6aM")
-                    }
+                    onClick={() => window.open("/booking", "_blank")}
                     className={styles.actionButton}
                   >
                     <h2>RCIC Appointment</h2>

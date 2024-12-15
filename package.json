@@ -11,8 +11,10 @@
     "cors": "^2.8.5",
     "express": "^4.21.0",
     "framer-motion": "^11.5.4",
+    "fs": "^0.0.1-security",
     "nodemailer": "^6.9.15",
     "odometer": "^0.4.8",
+    "path": "^0.12.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-google-recaptcha": "^3.1.0",
@@ -25,6 +27,7 @@
     "react-svg": "^16.1.34",
     "react-toastify": "^10.0.5",
     "react-transition-group": "^4.4.5",
+    "sitemap": "^8.0.0",
     "swiper": "^11.1.9",
     "web-vitals": "^2.1.4"
   },
@@ -32,7 +35,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "postbuild": "react-snap"
   },
   "browserslist": {
     "production": [
@@ -48,6 +52,7 @@
   },
   "devDependencies": {
     "eslint-config-react-app": "^7.0.1",
-    "eslint-plugin-import": "^2.29.1"
+    "eslint-plugin-import": "^2.29.1",
+    "react-snap": "^1.23.0"
   }
 }

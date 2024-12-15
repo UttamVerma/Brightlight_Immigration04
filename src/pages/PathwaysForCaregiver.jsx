@@ -107,6 +107,7 @@ const PathwaysForCaregiver = () => {
   return (
     <>
           <Helmet>
+          <link rel="canonical" href="https://brightlightimmigration.ca/pathways-for-caregiver" />
         <title>
           {metaData?.metaTitle
             ? metaData?.metaTitle
@@ -178,7 +179,7 @@ const PathwaysForCaregiver = () => {
         </div>
       </div>
 
-      <div className={styles.container}>
+      <div className={styles.container} id="container">
         <h1
           className={`${styles.title} ${styles.section}`}
           id="testing0"

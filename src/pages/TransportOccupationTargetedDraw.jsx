@@ -41,7 +41,7 @@ const TransportOccupationTargetedDraw = () => {
   }, []);
 
   useEffect(() => {
-    fetch("https://brightlight-node.onrender.com/transport-occupation")
+    fetch("https://brightlight-node.onrender.com/transportOccupaationTargetedDraw")
       .then((res) => {
         return res.json();
       })
@@ -191,7 +191,7 @@ const TransportOccupationTargetedDraw = () => {
         </div>
       </div>
 
-      <div className={styles.container}>
+      <div className={styles.container} id="container">
         <h1
           className={`${styles.heading} ${styles.section}`}
           id="about-program"
@@ -341,7 +341,7 @@ const TransportOccupationTargetedDraw = () => {
               <tr>
                 <td>{pData?.etroT1Li7 }</td>
                 <td>{pData?.etroT2Li7 }</td>
-                <td>{pData?.etroT3Li17}</td>
+                <td>{pData?.etroT3Li7}</td>
               </tr>
               <tr>
                 <td>{pData?.etroT1Li8 }</td>
@@ -431,7 +431,7 @@ const TransportOccupationTargetedDraw = () => {
           ref={(el) => (sectionsRef.current[9] = el)}
         >
         <h2>  {pData?.WhyChooseUsHeading01 }</h2>
-          <ul  style={{marginLeft: "40px", listStyle: "disc"}}>
+          <ul className={styles.whychooseusLi}  style={{marginLeft: "40px", listStyle: "disc"}}>
             <li>
               <strong>{strongText91}</strong>{" "} {remainingText91}
             </li>

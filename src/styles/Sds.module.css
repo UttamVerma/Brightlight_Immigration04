@@ -6,6 +6,28 @@
   padding: 30px 0px;
   padding-top: 150px;
 }
+
+.flashingNote{
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 50px;
+}
+
+.flashingNote h1{
+  margin-bottom: 5px;
+  color: red;
+}
+
+.flashingNote p{
+  color: red;
+  font-weight: 600;
+}
+
+.flashingNote button{
+  margin-top: 20px;
+  border: 1px solid white;
+}
+
 .banner {
   width: 1440px;
   margin: auto;
@@ -318,4 +340,7 @@
   .heading {
     font-size: 26px;
   }
+}
+.whychooseusLi li{
+  margin-top: 8px;
 }

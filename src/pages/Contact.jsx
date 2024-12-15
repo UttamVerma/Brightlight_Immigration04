@@ -163,6 +163,7 @@ const Contact = () => {
     <>
       <ToastContainer />
       <Helmet>
+      <link rel="canonical" href="https://brightlightimmigration.ca/contact" />
         <title>
           {metaData?.metaTitle
             ? metaData?.metaTitle

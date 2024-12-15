@@ -109,6 +109,7 @@ const CommonLawPartnerPermanent = () => {
   return (
     <>
         <Helmet>
+        <link rel="canonical" href="https://brightlightimmigration.ca/common-law-partner-permanent" />
         <title>
           {metaData?.metaTitle
             ? metaData?.metaTitle
@@ -179,7 +180,7 @@ const CommonLawPartnerPermanent = () => {
         </div>
       </div>
 
-      <div className={styles.container}>
+      <div className={styles.container} id="container">
         <h1 className={styles.heading} >
         {pData?.comLawPartPermanHeading}
         </h1>
@@ -286,7 +287,7 @@ const CommonLawPartnerPermanent = () => {
           </ul>
         </section>
 
-        <section className={`${styles.assistance} ${styles.section}`} id="testing2" ref={(el) => sectionsRef.current[5] = el}>
+        <section className={`${styles.assistance} ${styles.section}`} id="book-appointment" ref={(el) => sectionsRef.current[5] = el}>
           <h2 className={styles.subheading}>{pData?.NeedAssisHeading}</h2>
           <p>
           {pData?.NeedAssisPara}
@@ -307,7 +308,7 @@ const CommonLawPartnerPermanent = () => {
           ref={(el) => (sectionsRef.current[9] = el)}
         >
         <h2>  {pData?.WhyChooseUsHeading01 }</h2>
-          <ul style={{marginLeft: "40px"}}>
+          <ul className={styles.whychooseusLi} style={{marginLeft: "40px"}}>
             <li>
               <strong>{strongText91}</strong>{" "} {remainingText91}
             </li>

@@ -99,6 +99,7 @@ const ExpressEntry = () => {
   return (
     <>
       <Helmet>
+      <link rel="canonical" href="https://brightlightimmigration.ca/express-entry" />
         <title>
           {metaData?.metaTitle
             ? metaData?.metaTitle

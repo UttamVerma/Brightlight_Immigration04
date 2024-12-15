@@ -107,6 +107,7 @@ const AdditionalDocument = () => {
   return (
     <>
       <Helmet>
+      <link rel="canonical" href="https://brightlightimmigration.ca/additional-document" />
         <title>
           {metaData?.metaTitle
             ? metaData?.metaTitle
@@ -180,7 +181,7 @@ const AdditionalDocument = () => {
         </div>
       </div>
 
-      <div className={styles.container}>
+      <div className={styles.container} id="container">
         <header className={styles.header} id="about-program">
           <h1>{pData?.AdditionalDocumentHeading}</h1>
         </header>
@@ -245,7 +246,7 @@ const AdditionalDocument = () => {
             ref={(el) => (sectionsRef.current[9] = el)}
           >
             <h2> {pData?.WhyChooseUsHeading01}</h2>
-            <ul style={{ marginLeft: "40px" }}>
+            <ul className={styles.whychooseusLi}  style={{ marginLeft: "40px" }}>
               <li>
                 <strong>{strongText91}</strong> {remainingText91}
               </li>

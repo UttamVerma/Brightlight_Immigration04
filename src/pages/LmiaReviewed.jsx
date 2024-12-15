@@ -107,6 +107,7 @@ const LmiaReviewed = () => {
     <>
 
      <Helmet>
+     <link rel="canonical" href="https://brightlightimmigration.ca/lmia-reviewed" />
         <title>
           {metaData?.metaTitle
             ? metaData?.metaTitle
@@ -190,7 +191,7 @@ const LmiaReviewed = () => {
         </div>
       </div>
 
-      <div className={styles.container}>
+      <div className={styles.container} id="container">
         <main className={styles.mainContent}>
           <section
             className={`${styles.section} ${styles.section}`}
@@ -289,7 +290,7 @@ const LmiaReviewed = () => {
             <h2>{pData?.ApplyHeading}</h2>
             <div className={styles.applicationProcess}>
               <h3>{pData?.ApplyEmployerSubHeading}</h3>
-              <ul
+              <ul className={styles.RefusalList}
                 style={{
                   marginTop: "10px",
                   marginLeft: "40px",
@@ -310,7 +311,7 @@ const LmiaReviewed = () => {
                 </li>
               </ul>
               <h3>{pData?.ApplyForeignSubHeading}</h3>
-              <ul
+              <ul className={styles.RefusalList}
                 style={{
                   marginTop: "10px",
                   marginLeft: "40px",
@@ -341,7 +342,7 @@ const LmiaReviewed = () => {
             <h4>
             {pData?.RefusalSubHeading}
             </h4>
-            <ul
+            <ul className={styles.RefusalList} 
               style={{
                 marginTop: "10px",
                 marginLeft: "40px",
@@ -404,7 +405,7 @@ const LmiaReviewed = () => {
             ref={(el) => (sectionsRef.current[9] = el)}
           >
          <h2>  {pData?.WhyChooseUsHeading01 }</h2>
-          <ul style={{marginLeft: "40px"}}>
+          <ul className={styles.whychooseusLi} style={{marginLeft: "40px"}}>
             <li>
               <strong>{strongText91}</strong>{" "} {remainingText91}
             </li>

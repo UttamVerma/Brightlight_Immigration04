@@ -105,6 +105,7 @@ const CategoryBasedExpress = () => {
   return (
     <>
           <Helmet>
+          <link rel="canonical" href="https://brightlightimmigration.ca/category-based" />
         <title>
           {metaData?.metaTitle
             ? metaData?.metaTitle
@@ -185,7 +186,7 @@ const CategoryBasedExpress = () => {
         </div>
       </div>
 
-      <div className={styles.container}>
+      <div className={styles.container} id="container">
         <main className={styles.mainContent}>
           <section
             className={`${styles.section} ${styles.section}`}
@@ -407,7 +408,7 @@ const CategoryBasedExpress = () => {
           </section>
 
           <h2>  {pData?.WhyChooseUsHeading01 }</h2>
-          <ul style={{marginLeft: "40px"}}>
+          <ul className={styles.whychooseusLi} style={{marginLeft: "40px"}}>
             <li>
               <strong>{strongText91}</strong>{" "} {remainingText91}
             </li>

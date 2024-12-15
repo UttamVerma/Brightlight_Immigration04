@@ -108,6 +108,7 @@ const LowWageLmia = () => {
   return (
     <>
       <Helmet>
+      <link rel="canonical" href="https://brightlightimmigration.ca/low-wage-lmia" />
         <title>
           {metaData?.metaTitle
             ? metaData?.metaTitle
@@ -186,7 +187,7 @@ const LowWageLmia = () => {
         </div>
       </div>
 
-      <div className={styles.container}>
+      <div className={styles.container} id="container">
         <header
           className={`${styles.header} ${styles.section}`}
           id="about-program"
@@ -244,60 +245,74 @@ const LowWageLmia = () => {
               <tr>
                 <th>{pData?.ProvTeriTableHeading}</th>
                 <th>{pData?.MediHouTableHeading}</th>
+                <th>{pData?.MediHouTableHeading2}</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>{pData?.ProvTeriTable1}</td>
                 <td>{pData?.MediHouTable1}</td>
+                <td>{pData?.MediHouTable1Col2}</td>
               </tr>
               <tr>
                 <td>{pData?.ProvTeriTable2}</td>
                 <td>{pData?.MediHouTable2}</td>
+                <td>{pData?.MediHouTable2Col2}</td>
               </tr>
               <tr>
                 <td>{pData?.ProvTeriTable3}</td>
                 <td>{pData?.MediHouTable3}</td>
+                <td>{pData?.MediHouTable3Col2}</td>
               </tr>
               <tr>
                 <td>{pData?.ProvTeriTable4}</td>
                 <td>{pData?.MediHouTable4}</td>
+                <td>{pData?.MediHouTable4Col2}</td>
               </tr>
               <tr>
                 <td>{pData?.ProvTeriTable5}</td>
                 <td>{pData?.MediHouTable5}</td>
+                <td>{pData?.MediHouTable5Col2}</td>
               </tr>
               <tr>
                 <td>{pData?.ProvTeriTable6}</td>
                 <td>{pData?.MediHouTable6}</td>
+                <td>{pData?.MediHouTable6Col2}</td>
               </tr>
               <tr>
                 <td>{pData?.ProvTeriTable7}</td>
                 <td>{pData?.MediHouTable7}</td>
+                <td>{pData?.MediHouTable7Col2}</td>
               </tr>
               <tr>
                 <td>{pData?.ProvTeriTable8}</td>
                 <td>{pData?.MediHouTable8}</td>
+                <td>{pData?.MediHouTable8Col2}</td>
               </tr>
               <tr>
                 <td>{pData?.ProvTeriTable9}</td>
                 <td>{pData?.MediHouTable9}</td>
+                <td>{pData?.MediHouTable9Col2}</td>
               </tr>
               <tr>
                 <td>{pData?.ProvTeriTable10}</td>
                 <td>{pData?.MediHouTable10}</td>
+                <td>{pData?.MediHouTable10Col2}</td>
               </tr>
               <tr>
                 <td>{pData?.ProvTeriTable11}</td>
                 <td>{pData?.MediHouTable11}</td>
+                <td>{pData?.MediHouTable11Col2}</td>
               </tr>
               <tr>
                 <td>{pData?.ProvTeriTable12}</td>
                 <td>{pData?.MediHouTable12}</td>
+                <td>{pData?.MediHouTable12Col2}</td>
               </tr>
               <tr>
                 <td>{pData?.ProvTeriTable13}</td>
                 <td>{pData?.MediHouTable13}</td>
+                <td>{pData?.MediHouTable13Col2}</td>
               </tr>
             </tbody>
           </table>
@@ -569,7 +584,7 @@ const LowWageLmia = () => {
           ref={(el) => (sectionsRef.current[65] = el)}
         >
         <h2>  {pData?.WhyChooseUsHeading01 }</h2>
-          <ul style={{marginLeft: "40px"}}>
+          <ul className={styles.whychooseusLi} style={{marginLeft: "40px"}}>
             <li>
               <strong>{strongText91}</strong>{" "} {remainingText91}
             </li>
