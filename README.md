@@ -41,13 +41,15 @@ Feel free to explore these videos for a better understanding of how to set up an
 To get started with Bright Light Immigration, follow these steps:
 
 
-(Admin Access) ![image](https://github.com/user-attachments/assets/fd57c9c0-caaf-4344-8c34-56c26bd7291b)
+(Admin Access) ![image](https://github.com/user-attachments/assets/4d8c5298-5487-4601-9041-64e927d71ff6)
+
 
 
 1. **Admin Access**: Use the admin login page to access the backend GUI. Credentials can be configured through environment variables or initial setup.
 
 
-(Dashboard Overview) ![image](https://github.com/user-attachments/assets/77237771-96c2-4fc2-a9a8-555167445478)
+(Dashboard Overview) ![image](https://github.com/user-attachments/assets/8e6ab683-3739-4f1a-ab2f-889e4a20a56f)
+
 
 
 
@@ -55,11 +57,13 @@ To get started with Bright Light Immigration, follow these steps:
 2. **Dashboard Overview**: Once logged in, navigate through the admin dashboard to access the following:
 
 
-(Meta Tags) ![image](https://github.com/user-attachments/assets/147325f4-49af-444d-9ff9-86713a78f7b5)
+(Meta Tags) ![image](https://github.com/user-attachments/assets/b49f6a90-37de-4cad-a05a-5263271b6ae5)
+
 
    - **Meta Tags**: Update page meta tags, including title, description, and keywords, directly through the dashboard to improve SEO dynamically.
 
-(Blog and News Management)![image](https://github.com/user-attachments/assets/c4faa0a2-4b10-4164-b821-ed9a500b3ab0)
+(Blog and News Management) ![image](https://github.com/user-attachments/assets/0c11c2ee-2549-428e-8203-24af1e7aeb73)
+
 
 
    - **Blog and News Management**: Create, edit, or remove blog posts and news articles, making it easy to maintain an up-to-date content stream.
